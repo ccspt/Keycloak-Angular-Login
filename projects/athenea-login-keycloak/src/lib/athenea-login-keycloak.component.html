@@ -1,0 +1,15 @@
+<ion-content [fullscreen]="true" class="bg-brand-logo header-offset">
+    <div class="login-panel">
+      <!-- Logo -->
+      <img src="assets/img/logoParcTauli2023.svg" alt="logo">
+      <h1>{{ 'redirect_page.title' | translate }}</h1>
+      <ion-spinner name="dots" class="m-2"></ion-spinner>
+      <h3>
+        {{ 'redirect_page.content.1' | translate }}
+        <br/>
+        {{ 'redirect_page.content.2' | translate }}
+        <a (click)='login()'>{{ 'redirect_page.content.3' | translate }}</a>
+        {{ 'redirect_page.content.4' | translate }}
+      </h3>
+    </div>
+</ion-content>
