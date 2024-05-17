@@ -1,16 +1,19 @@
 {
   "name": "athenea-login-keycloak",
-  "version": "0.1.4",
+  "version": "0.3.4",
   "peerDependencies": {
     "@angular/common": "^17.3.0",
     "@angular/core": "^17.3.0"
   },
   "dependencies": {
-    "@ionic/angular": "^8.1.2",
+    "@capacitor/preferences": "^6.0.0",
     "@ngx-translate/core": "^15.0.0",
     "angular-oauth2-oidc": "^17.0.2",
     "angular-oauth2-oidc-jwks": "^17.0.2",
     "tslib": "^2.3.0"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "devDependencies": {
+    "@ionic/angular": "^8.1.2"
+  }
 }

@@ -3,17 +3,10 @@ import { AtheneaLoginKeycloakService } from './athenea-login-keycloak.service';
 
 @Component({
   selector: 'lib-athenea-login-keycloak',
-  templateUrl: './athenea-login-keycloak.component.html',
-  styleUrls: ['./athenea-login-keycloak.component.scss'],
+  template: `
+    <p>Hola</p>
+  `
 })
 export class AtheneaLoginKeycloakComponent {
-
-  constructor(
-    private as: AtheneaLoginKeycloakService
-  ) { }
-
-  login() {
-    this.as.login();
-  }
 
 }

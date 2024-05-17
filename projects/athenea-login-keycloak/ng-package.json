@@ -5,10 +5,10 @@
     "entryFile": "src/public-api.ts"
   },
   "allowedNonPeerDependencies": [
-    "@ionic/angular",
-    "@ngx-translate/core",
+    "@capacitor/preferences",
     "angular-oauth2-oidc",
     "angular-oauth2-oidc-jwks",
-    "tslib"
+    "tslib",
+    "@ngx-translate/core"
   ]
 }
