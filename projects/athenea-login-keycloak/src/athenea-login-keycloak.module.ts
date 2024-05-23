@@ -1,10 +1,12 @@
 import { ModuleWithProviders, NgModule, APP_INITIALIZER, InjectionToken } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ConfigService } from './config.service';
 import { AuthConfig } from 'angular-oauth2-oidc';
 import { IonicModule } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { OAuthModule } from 'angular-oauth2-oidc';
 
 export const CONFIG_URL = new InjectionToken<string>('configUrl');
 export const LANGUAGE = new InjectionToken<string>('language');
@@ -21,8 +23,24 @@ export function initializeConfig(configService: ConfigService, configUrl: string
   });
 }
 
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
+
 @NgModule({
-  imports: [CommonModule, HttpClientModule, IonicModule],
+  imports: [
+    CommonModule, 
+    HttpClientModule, 
+    IonicModule,
+    OAuthModule.forRoot(),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: createTranslateLoader,
+        deps: [HttpClient]
+      }
+    }),
+  ],
   providers: [ConfigService]
 })
 export class AtheneaLoginKeycloakModule {

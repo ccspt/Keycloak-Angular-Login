@@ -147,6 +147,51 @@ const routes: Routes = [
 export class AppRoutingModule { }
 ```
 
+And now we need to add the following to `app.component.ts`:
+
+```typescript
+import { ChangeDetectorRef, Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { AtheneaLoginKeycloakService, ConfigService } from 'athenea-login-keycloak';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: 'app.component.html',
+  styleUrls: ['app.component.scss'],
+})
+export class AppComponent {
+  constructor(
+    private as: AtheneaLoginKeycloakService,
+    private translate: TranslateService,
+    public router: Router,
+    private keycloakService: ConfigService,
+    private cdr: ChangeDetectorRef
+  ) {
+    this.init();
+    translate.setDefaultLang('ca');
+    translate.use('ca');
+  }
+
+  private async init() {
+    try {
+      const response = await this.as.initOAuth();
+      if (response) {
+        this.router.navigate(['/home']).then(() => {
+          this.cdr.detectChanges();
+        });
+      } else {
+        this.router.navigate(['/login-redirect']).then(() => {
+          this.cdr.detectChanges();
+        });
+      }
+    } catch (error) {
+      console.error('Error during initialization', error);
+    }
+  }
+}
+```
+
 And to be able to log out of the application, we need to add the following function to the corresponding button:
 
 ```typescript

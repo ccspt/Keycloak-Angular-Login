@@ -1,6 +1,6 @@
 {
   "name": "athenea-login-keycloak",
-  "version": "0.3.6",
+  "version": "0.3.8",
   "peerDependencies": {
     "@angular/common": "^17.3.0",
     "@angular/core": "^17.3.0"
@@ -8,6 +8,7 @@
   "dependencies": {
     "@capacitor/preferences": "^6.0.0",
     "@ngx-translate/core": "^15.0.0",
+    "@ngx-translate/http-loader": "^8.0.0",
     "angular-oauth2-oidc": "^17.0.2",
     "angular-oauth2-oidc-jwks": "^17.0.2",
     "tslib": "^2.3.0"
