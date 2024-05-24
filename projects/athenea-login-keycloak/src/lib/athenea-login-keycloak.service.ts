@@ -10,6 +10,7 @@ import { ConfigService } from '../config.service';
 interface UserProfile {
   info?: {
       name?: string;
+      preferred_username?: string;
   };
 }
 
@@ -63,7 +64,7 @@ export class AtheneaLoginKeycloakService {
 
         this.token = this.oauthService.getAccessToken();
         const tokenDecoded: UserProfile | undefined = await this.oauthService.loadUserProfile();
-        const userName = tokenDecoded?.info?.name;
+        const userName = tokenDecoded?.info?.preferred_username;
         if (userName) {
             this.setUser(userName);
         } else {
