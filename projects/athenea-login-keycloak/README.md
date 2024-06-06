@@ -20,7 +20,8 @@ To use it, navigate to the `assets` folder and create a file named `sso.config.j
     "clientId": "{my_clientId}",
     "responseType": "code",
     "scope": "openid email profile",
-    "showDebugInformation": true
+    "showDebugInformation": true,
+    "allowedRoles": [] //roles allowed tu enter app
 }
 ```
 
@@ -175,15 +176,16 @@ export class AppComponent {
 
   private async init() {
     try {
-      const response = await this.as.initOAuth();
+      const response = await this.authService.initOAuth();
       if (response) {
-        this.router.navigate(['/home']).then(() => {
-          this.cdr.detectChanges();
-        });
+        await this.rolesService.checkRoles();
+        if (!this.rolesService.correctRoles) {
+          // action if it does not have roles
+        } else {
+          this.router.navigate(['/home']);
+        }
       } else {
-        this.router.navigate(['/login-redirect']).then(() => {
-          this.cdr.detectChanges();
-        });
+        this.router.navigate(['/login-redirect']);
       }
     } catch (error) {
       console.error('Error during initialization', error);
