@@ -28,16 +28,20 @@ export class AtheneaLoginKeycloakService {
       private configService: ConfigService,
   ) { }
 
-  async setUser(name: string | null) {
+  async setUser(name: string | null, token: string | null) {
       this.userName = name;
       if (!name) return Preferences.remove({ key: 'name_user'});
+      if (!token) return Preferences.remove({ key: 'token'});
       Preferences.set({ key: 'name_user', value: name });
+      Preferences.set({ key: 'token', value: token });
   }
   
   async loadUser() {
       let userName = await Preferences.get({ key: 'name_user' });
-      if (userName && userName.value) {
+      let token = await Preferences.get({ key: 'token' });
+      if (userName && userName.value && token && token.value) {
           this.userName = userName.value;
+          this.token = token.value;
       }
   }
 
@@ -66,9 +70,9 @@ export class AtheneaLoginKeycloakService {
         const tokenDecoded: UserProfile | undefined = await this.oauthService.loadUserProfile();
         const userName = tokenDecoded?.info?.preferred_username;
         if (userName) {
-            this.setUser(userName);
+            this.setUser(userName, this.token);
         } else {
-            this.setUser(null);
+            this.setUser(null, null);
         }
         this.logged = this.token ? true : false;
         if (this.logged) 

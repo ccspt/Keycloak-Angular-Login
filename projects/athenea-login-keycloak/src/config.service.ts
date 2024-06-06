@@ -9,6 +9,7 @@ import { AuthConfig } from 'angular-oauth2-oidc';
 })
 export class ConfigService {
   private config: AuthConfig | undefined;
+  private roles: any | undefined;
 
   constructor(private http: HttpClient) { }
 
@@ -22,5 +23,17 @@ export class ConfigService {
 
   getConfig() {
     return this.config;
+  }
+
+  loadRoles(rolsUrl: string): Observable<any> {
+    return this.http.get(rolsUrl);
+  }
+
+  setRoles(roles: any) {
+    this.roles = roles;
+  }
+
+  getRoles() {
+    return this.roles;
   }
 }

@@ -4,6 +4,7 @@
 
 export * from './lib/athenea-login-keycloak.service';
 export * from './lib/athenea-login-keycloak-guard.service';
+export * from './lib/athenea-login-keycloak-roles.service';
 export * from './lib/athenea-login-keycloak.component';
 export * from './config.service';
 export * from './athenea-login-keycloak.module';

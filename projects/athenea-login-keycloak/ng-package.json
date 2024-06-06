@@ -10,6 +10,7 @@
     "angular-oauth2-oidc-jwks",
     "tslib",
     "@ngx-translate/core",
-    "@ngx-translate/http-loader"
+    "@ngx-translate/http-loader",
+    "jwt-decode"
   ]
 }

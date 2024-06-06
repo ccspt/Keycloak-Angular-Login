@@ -12,6 +12,20 @@ export const CONFIG_URL = new InjectionToken<string>('configUrl');
 export const LANGUAGE = new InjectionToken<string>('language');
 
 export function initializeConfig(configService: ConfigService, configUrl: string, translateService: TranslateService, language: string): () => Promise<any> {
+  return () => configService.loadConfig(configUrl).toPromise().then((data: any) => {
+    const config: AuthConfig = data;
+    configService.setConfig({
+        ...config,
+        redirectUri: window.location.origin + config.redirectUri,
+        logoutUrl: window.location.origin + config.logoutUrl,
+    });
+    translateService.setDefaultLang(language);
+    translateService.use(language);
+    configService.setRoles(data.allowedRoles);
+  });
+}
+
+/*export function initializeConfig(configService: ConfigService, configUrl: string, translateService: TranslateService, language: string): () => Promise<any> {
   return () => configService.loadConfig(configUrl).toPromise().then((config: AuthConfig) => {
     configService.setConfig({
         ...config,
@@ -21,7 +35,7 @@ export function initializeConfig(configService: ConfigService, configUrl: string
     translateService.setDefaultLang(language);
     translateService.use(language);
   });
-}
+}*/
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http);
