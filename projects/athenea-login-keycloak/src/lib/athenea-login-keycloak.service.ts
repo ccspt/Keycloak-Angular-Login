@@ -91,5 +91,6 @@ export class AtheneaLoginKeycloakService {
   
   logout() {
       this.oauthService.logOut();
+      Preferences.clear();
   }
 }
