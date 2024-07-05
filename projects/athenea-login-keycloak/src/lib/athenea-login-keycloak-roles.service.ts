@@ -56,5 +56,16 @@ export class AtheneaRolesServie {
         }
         return null;
     }
+
+    async getAllRoles() {
+        await this.authService.loadUser();
+        if (this.authService.token) {
+            let token = this.authService.token;
+            let tokenDecoded: any = jwtDecode(token);
+            if (tokenDecoded && tokenDecoded.resource_access) {
+                return tokenDecoded.resource_access;
+            }
+        }
+    }
 }
 
