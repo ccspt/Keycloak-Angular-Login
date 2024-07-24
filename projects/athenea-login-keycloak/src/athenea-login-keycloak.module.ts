@@ -7,11 +7,13 @@ import { IonicModule } from '@ionic/angular';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { OAuthModule } from 'angular-oauth2-oidc';
+import { ProfessionalService } from './lib/professional.service';
 
 export const CONFIG_URL = new InjectionToken<string>('configUrl');
+export const BACKEND_PATI = new InjectionToken<string>('backend_pati');
 export const LANGUAGE = new InjectionToken<string>('language');
 
-export function initializeConfig(configService: ConfigService, configUrl: string, translateService: TranslateService, language: string): () => Promise<any> {
+export function initializeConfig(configService: ConfigService, configUrl: string, translateService: TranslateService, language: string, backend_pati: string, professionalService: ProfessionalService): () => Promise<any> {
   return () => configService.loadConfig(configUrl).toPromise().then((data: any) => {
     const config: AuthConfig = data;
     configService.setConfig({
@@ -22,6 +24,7 @@ export function initializeConfig(configService: ConfigService, configUrl: string
     translateService.setDefaultLang(language);
     translateService.use(language);
     configService.setRoles(data.allowedRoles);
+    professionalService.setUrl(backend_pati);
   });
 }
 
@@ -58,7 +61,7 @@ export function createTranslateLoader(http: HttpClient) {
   providers: [ConfigService]
 })
 export class AtheneaLoginKeycloakModule {
-  static forRoot(configUrl: string, language: string): ModuleWithProviders<AtheneaLoginKeycloakModule> {
+  static forRoot(configUrl: string, language: string, backend_pati: string): ModuleWithProviders<AtheneaLoginKeycloakModule> {
     return {
       ngModule: AtheneaLoginKeycloakModule,
       providers: [
@@ -69,7 +72,8 @@ export class AtheneaLoginKeycloakModule {
           multi: true
         },
         { provide: CONFIG_URL, useValue: configUrl },
-        { provide: LANGUAGE, useValue: language }
+        { provide: LANGUAGE, useValue: language },
+        { provide: BACKEND_PATI, useValue: backend_pati }
       ]
     };
   }
