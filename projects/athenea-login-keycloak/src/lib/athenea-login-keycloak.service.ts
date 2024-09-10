@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Router } from "@angular/router";
 import { Preferences } from "@capacitor/preferences";
 
 //OAUTH2
@@ -81,7 +80,7 @@ export class AtheneaLoginKeycloakService {
     const username = tokenDecoded?.info?.preferred_username;
     if (userName && username) {
         this.setUser(userName, this.token, username);
-        await this.professionalService.assignDynamicRoles(username);
+        await this.professionalService.assignDynamicRoles(this.getToken());
         this.oauthService.refreshToken();
     } else {
         this.setUser(null, null, null);
@@ -108,23 +107,5 @@ export class AtheneaLoginKeycloakService {
 
   getToken() {
     return this.token =  this.oauthService.getAccessToken();
-  }
-
-  async refreshToken () {
-    this.oauthService.refreshToken();
-    this.getToken();
-    const tokenDecoded: UserProfile | undefined = await this.oauthService.loadUserProfile();
-    const userName = tokenDecoded?.info?.name;
-    const username = tokenDecoded?.info?.preferred_username;
-    if (userName && username) {
-        this.setUser(userName, this.token, username);
-    } else {
-        this.setUser(null, null, null);
-    }
-    this.logged = this.token ? true : false;
-    if (this.logged) 
-        return userName;
-    else
-        return null;
   }
 }

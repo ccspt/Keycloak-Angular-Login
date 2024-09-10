@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { AtheneaLoginKeycloakService } from "./athenea-login-keycloak.service";
 
 
 @Injectable({
@@ -8,20 +9,31 @@ import { HttpClient } from "@angular/common/http";
 export class ProfessionalService { 
 
     url: string = '';
+    id_app: string = '';
 
     constructor(
-        public http: HttpClient,
+        public http: HttpClient    
     ) { } 
 
     setUrl (url: string) {
         this.url = url;
     }
 
-    async assignDynamicRoles(username: string) {
+    setIdApp (id: string) {
+        this.id_app = id;
+    }
+
+    async assignDynamicRoles(token: string) {
         const url = `${this.url}/dynamic-roles/assign`;
-        const body = { username: username, clientId: 'icura-backoffice' };
+        const body = { clientId: this.id_app };
+        const httpOptions = {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json' 
+            }
+        };
         try {
-            const response = await this.http.put(url, body).toPromise();
+            const response = await this.http.put(url, body, httpOptions).toPromise();
             return response;
         } catch (error) {
             console.error('Error assigning dynamic roles', error);

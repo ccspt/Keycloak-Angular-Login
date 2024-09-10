@@ -12,8 +12,9 @@ import { ProfessionalService } from './lib/professional.service';
 export const CONFIG_URL = new InjectionToken<string>('configUrl');
 export const BACKEND_PATI = new InjectionToken<string>('backend_pati');
 export const LANGUAGE = new InjectionToken<string>('language');
+export const ID_APP = new InjectionToken<string>('id_app');
 
-export function initializeConfig(configService: ConfigService, configUrl: string, translateService: TranslateService, language: string, backend_pati: string, professionalService: ProfessionalService): () => Promise<any> {
+export function initializeConfig(configService: ConfigService, configUrl: string, translateService: TranslateService, language: string, backend_pati: string, id_app: string, professionalService: ProfessionalService): () => Promise<any> {
   return () => configService.loadConfig(configUrl).toPromise().then((data: any) => {
     const config: AuthConfig = data;
     configService.setConfig({
@@ -25,6 +26,7 @@ export function initializeConfig(configService: ConfigService, configUrl: string
     translateService.use(language);
     configService.setRoles(data.allowedRoles);
     professionalService.setUrl(backend_pati);
+    professionalService.setIdApp(id_app);
   });
 }
 
@@ -58,22 +60,24 @@ export function createTranslateLoader(http: HttpClient) {
       }
     }),
   ],
-  providers: [ConfigService]
+  providers: [ConfigService, ProfessionalService]
 })
 export class AtheneaLoginKeycloakModule {
-  static forRoot(configUrl: string, language: string, backend_pati: string): ModuleWithProviders<AtheneaLoginKeycloakModule> {
+  static forRoot(configUrl: string, language: string, backend_pati: string, id_app: string): ModuleWithProviders<AtheneaLoginKeycloakModule> {
     return {
       ngModule: AtheneaLoginKeycloakModule,
       providers: [
         {
           provide: APP_INITIALIZER,
           useFactory: initializeConfig,
-          deps: [ConfigService, CONFIG_URL, TranslateService, LANGUAGE],
+          deps: [ConfigService, CONFIG_URL, TranslateService, LANGUAGE, BACKEND_PATI, ID_APP, ProfessionalService],
           multi: true
         },
         { provide: CONFIG_URL, useValue: configUrl },
         { provide: LANGUAGE, useValue: language },
-        { provide: BACKEND_PATI, useValue: backend_pati }
+        { provide: BACKEND_PATI, useValue: backend_pati },
+        { provide: ID_APP, useValue: id_app },
+        ProfessionalService
       ]
     };
   }
