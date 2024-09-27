@@ -20,11 +20,13 @@ export class AtheneaRolesServie {
     async checkRoles () {
         this.correctRolesList = this.configService.getRoles();
         await this.authService.loadUser();
-        if (this.authService.token) {
-            let token = this.authService.token;
-            let tokenDecoded: any = jwtDecode(token);
-            if (tokenDecoded && tokenDecoded.resource_access) {
-                this.correctRoles = this.checkCorrectRoles(tokenDecoded.resource_access);
+        if (this.authService.getToken()) {
+            if (this.authService.token) {
+                let token = this.authService.token;
+                let tokenDecoded: any = jwtDecode(token);
+                if (tokenDecoded && tokenDecoded.resource_access) {
+                    this.correctRoles = this.checkCorrectRoles(tokenDecoded.resource_access);
+                }
             }
         }
         

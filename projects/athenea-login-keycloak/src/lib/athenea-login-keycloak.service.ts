@@ -75,6 +75,7 @@ export class AtheneaLoginKeycloakService {
     await this.oauthService.loadDiscoveryDocumentAndLogin();
 
     this.getToken();
+    this.oauthService.refreshToken();
     const tokenDecoded: UserProfile | undefined = await this.oauthService.loadUserProfile();
     const userName = tokenDecoded?.info?.name;
     const username = tokenDecoded?.info?.preferred_username;
