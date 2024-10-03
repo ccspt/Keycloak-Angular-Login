@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Router, RouterStateSnapshot } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { AtheneaLoginKeycloakService } from './athenea-login-keycloak.service';
 import { ConfigService } from '../config.service';
@@ -47,7 +46,7 @@ export class AtheneaRolesServie {
         return false;
     }
 
-    async getRoles(appName: string) {
+    async getCapacities(appName: string) {
         const token = this.authService.getToken();
         if (token) {
             let tokenDecoded: any = jwtDecode(token);

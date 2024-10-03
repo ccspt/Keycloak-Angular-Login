@@ -55,45 +55,44 @@ export class AtheneaLoginKeycloakService {
 
   async initOAuth() {
     try {
-    /**
-     * Inicia config
-     */
-    const authCodeFlowConfig = this.configService.getConfig();
-    if (!authCodeFlowConfig) {
-    throw new Error('Configuration not loaded');
-    }
-    this.oauthService.configure(authCodeFlowConfig);
-    this.oauthService.tokenValidationHandler = new JwksValidationHandler();
-    /**
-     * Carrega i gestiona automaticament el refresh de la sessió
-     * loadDiscoveryDocumentAndTryLogin() -> Inicia i has de fer tu login manualment amb
-     *    this.oauthService.initImplicitFlow();
-     * loadDiscoveryDocumentAndLogin() -> Inicia i gestiona automaticament login en cas de no estar identificat
-     */
-    this.oauthService.setupAutomaticSilentRefresh();
-    // await this.oauthService.loadDiscoveryDocumentAndTryLogin();
-    await this.oauthService.loadDiscoveryDocumentAndLogin();
+      /**
+       * Inicia config
+       */
+      const authCodeFlowConfig = this.configService.getConfig();
+      if (!authCodeFlowConfig) {
+      throw new Error('Configuration not loaded');
+      }
+      this.oauthService.configure(authCodeFlowConfig);
+      this.oauthService.tokenValidationHandler = new JwksValidationHandler();
+      /**
+       * Carrega i gestiona automaticament el refresh de la sessió
+       * loadDiscoveryDocumentAndTryLogin() -> Inicia i has de fer tu login manualment amb
+       *    this.oauthService.initImplicitFlow();
+       * loadDiscoveryDocumentAndLogin() -> Inicia i gestiona automaticament login en cas de no estar identificat
+       */
+      this.oauthService.setupAutomaticSilentRefresh();
+      // await this.oauthService.loadDiscoveryDocumentAndTryLogin();
+      await this.oauthService.loadDiscoveryDocumentAndLogin();
 
-    this.getToken();
-    this.oauthService.refreshToken();
-    const tokenDecoded: UserProfile | undefined = await this.oauthService.loadUserProfile();
-    const userName = tokenDecoded?.info?.name;
-    const username = tokenDecoded?.info?.preferred_username;
-    if (userName && username) {
-        this.setUser(userName, this.token, username);
-        await this.professionalService.assignDynamicRoles(this.getToken());
-        this.oauthService.refreshToken();
-    } else {
-        this.setUser(null, null, null);
-    }
-    this.logged = this.token ? true : false;
-    if (this.logged) 
-        return userName;
-    else
-        return null;
+      this.getToken();
+      const tokenDecoded: UserProfile | undefined = await this.oauthService.loadUserProfile();
+      const userName = tokenDecoded?.info?.name;
+      const username = tokenDecoded?.info?.preferred_username;
+      if (userName && username) {
+          this.setUser(userName, this.token, username);
+          await this.professionalService.assignDynamicRoles(this.getToken());
+          this.oauthService.refreshToken();
+      } else {
+          this.setUser(null, null, null);
+      }
+      this.logged = this.token ? true : false;
+      if (this.logged) 
+          return userName;
+      else
+          return null;
     } catch (error) {
-        this.token = null;
-        return null;
+      this.token = null;
+      return null;
     }
   }
 
