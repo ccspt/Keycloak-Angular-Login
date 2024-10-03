@@ -51,7 +51,7 @@ export class AtheneaRolesServie {
         if (token) {
             let tokenDecoded: any = jwtDecode(token);
             if (tokenDecoded && tokenDecoded.resource_access) {
-                return tokenDecoded.resource_access[appName] || null;
+                return tokenDecoded.resource_access[appName]['roles'] || null;
             }
         }
         return null;
