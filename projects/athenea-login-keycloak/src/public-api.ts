@@ -11,3 +11,4 @@ export * from './athenea-login-keycloak.module';
 export * from './lib/login-redirect/login-redirect.component';
 export * from './lib/login-redirect-page/login-redirect-page.component';
 export * from './lib/no-roles-page/no-roles-page.component';
+export * from './lib/error-page/error-page.component';

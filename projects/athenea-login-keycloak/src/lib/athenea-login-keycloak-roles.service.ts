@@ -16,7 +16,7 @@ export class AtheneaRolesServie {
         public configService: ConfigService,
     ) {}
 
-    async checkRoles () {
+    async checkRoles (appName: string) {
         this.correctRolesList = this.configService.getRoles();
         await this.authService.loadUser();
         if (this.authService.getToken()) {
@@ -24,22 +24,21 @@ export class AtheneaRolesServie {
                 let token = this.authService.token;
                 let tokenDecoded: any = jwtDecode(token);
                 if (tokenDecoded && tokenDecoded.resource_access) {
-                    this.correctRoles = this.checkCorrectRoles(tokenDecoded.resource_access);
+                    this.correctRoles = this.checkCorrectRoles(tokenDecoded.resource_access, appName);
                 }
             }
         }
         
     }
 
-    checkCorrectRoles(resourceAccess: any): boolean {
-        for (let resource in resourceAccess) {
-            if (resourceAccess.hasOwnProperty(resource)) {
-                const roles = resourceAccess[resource].roles;
-                for (let role of this.correctRolesList) {
-                    if (roles.includes(role)) {
-                        this.correctRoles = true;
-                        return true; 
-                    }
+    checkCorrectRoles(resourceAccess: any, appName: string): boolean {
+        if (resourceAccess.hasOwnProperty(appName)) {
+            const roles = resourceAccess[appName].roles;
+            if (roles)
+            for (let role of this.correctRolesList) {
+                if (roles.includes(role)) {
+                    this.correctRoles = true;
+                    return true; 
                 }
             }
         }

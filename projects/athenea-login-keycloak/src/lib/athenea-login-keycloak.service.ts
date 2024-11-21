@@ -92,7 +92,7 @@ export class AtheneaLoginKeycloakService {
           return null;
     } catch (error) {
       this.token = null;
-      return null;
+      throw error;
     }
   }
 
