@@ -53,7 +53,7 @@ export class AtheneaLoginKeycloakService {
       }
   }
 
-  async initOAuth() {
+  async initOAuth(idpHint?: string) {
     try {
       /**
        * Inicia config
@@ -64,6 +64,11 @@ export class AtheneaLoginKeycloakService {
       }
       this.oauthService.configure(authCodeFlowConfig);
       this.oauthService.tokenValidationHandler = new JwksValidationHandler();
+      if (idpHint) {
+        this.oauthService.customQueryParams = {
+          kc_idp_hint: idpHint,
+        };
+      }
       /**
        * Carrega i gestiona automaticament el refresh de la sessió
        * loadDiscoveryDocumentAndTryLogin() -> Inicia i has de fer tu login manualment amb
@@ -106,6 +111,11 @@ export class AtheneaLoginKeycloakService {
   }
 
   getToken() {
+    return this.token =  this.oauthService.getAccessToken();
+  }
+
+  refreshToken() {
+    this.oauthService.refreshToken();
     return this.token =  this.oauthService.getAccessToken();
   }
 }
