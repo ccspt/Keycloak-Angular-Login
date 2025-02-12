@@ -2,7 +2,7 @@ import { ModuleWithProviders, NgModule, APP_INITIALIZER, InjectionToken } from '
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ConfigService } from './config.service';
-import { AuthConfig } from 'angular-oauth2-oidc';
+import { AuthConfig, OAuthStorage } from 'angular-oauth2-oidc';
 import { IonicModule } from '@ionic/angular';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -73,6 +73,7 @@ export class AtheneaLoginKeycloakModule {
           deps: [ConfigService, CONFIG_URL, TranslateService, LANGUAGE, BACKEND_PATI, ID_APP, ProfessionalService],
           multi: true
         },
+        { provide: OAuthStorage, useValue: localStorage },
         { provide: CONFIG_URL, useValue: configUrl },
         { provide: LANGUAGE, useValue: language },
         { provide: BACKEND_PATI, useValue: backend_pati },
