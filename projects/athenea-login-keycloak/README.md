@@ -5,7 +5,8 @@ Login redirect to keycloak.
 ## Installation
 
 ```bash
-npm i athenea-login-keycloak
+npm i @atheneasolutions/ng-login-keycloak
+
 ```
 
 ## Usage

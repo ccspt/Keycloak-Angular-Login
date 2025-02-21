@@ -1,5 +1,5 @@
 {
-  "name": "athenea-login-keycloak",
+  "name": "@atheneasolutions/ng-login-keycloak",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -8,7 +8,6 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
-  "private": true,
   "dependencies": {
     "@angular/animations": "^17.2.0",
     "@angular/common": "^17.2.0",

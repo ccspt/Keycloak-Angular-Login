@@ -1,6 +1,6 @@
 {
-  "name": "athenea-login-keycloak",
-  "version": "0.8.6",
+  "name": "@atheneasolutions/ng-login-keycloak",
+  "version": "1.0.3",
   "peerDependencies": {
     "@angular/common": "^17.3.0",
     "@angular/core": "^17.3.0"
@@ -17,5 +17,8 @@
   "sideEffects": false,
   "devDependencies": {
     "@ionic/angular": "^8.1.2"
+  },
+    "publishConfig": {
+    "access": "public"
   }
 }
