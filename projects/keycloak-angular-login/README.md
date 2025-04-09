@@ -1,0 +1,219 @@
+# Keycloak Aangular Login
+
+Login redirect to keycloak.
+
+## Installation
+
+```bash
+npm i @ccspt/keycloak-angular-login
+
+```
+
+## Usage
+
+To use it, navigate to the `assets` folder and create a file named `sso.config.json` with the following content:
+
+```json
+{
+    "issuer": "{my_issuer}",
+    "redirectUri": "/login-redirect",
+    "logoutUrl": "/login-redirect",
+    "clientId": "{my_clientId}",
+    "responseType": "code",
+    "scope": "openid email profile",
+    "showDebugInformation": true,
+    "allowedRoles": [] //roles allowed tu enter app
+}
+```
+
+Next, go to `app.module.ts` and add the following import:
+
+```typescript
+KeycloakAngularLoginModule.forRoot('assets/sso.config.json', 'ca')
+```
+
+`'ca'` refers to the default language we want, but if we change it in the code at any point, it will also change in the library.
+
+Now, go to the translation files and add the following:
+
+```json
+//ca.json
+"redirect_page": {
+    "title": "T'estem redirigint a la pàgina.",
+    "content": {
+        "1": "En cas de no fer-se la redirecció o aquesta trigui molt,",
+        "2": "fes click",
+        "3": "aquí",
+        "4": "o contacta amb nosaltres."
+    }
+},
+````
+```json
+//en.json
+"redirect_page": {
+    "title": "We are redirecting you to the page.",
+    "content": {
+        "1": "If the redirection is not done or it takes a long time,",
+        "2": "click",
+        "3": "here",
+        "4": "or contact us."
+    }
+},
+```
+```json
+//es.json
+"redirect_page": {
+      "title": "Te estamos redirigiendo a la página.",
+      "content": {
+          "1": "En caso de no hacerse la redirección o ésta tarde mucho,",
+          "2": "haz click",
+          "3": "aquí",
+          "4": "o contacta con nosotros."
+      }
+  },
+```
+
+The text can be changed, but the translation keys should not be changed.
+
+Also, in the `assets` folder, in the `img` directory, we need to add the `logoLogin.svg` file, which will be the logo that appears on the redirection page, and the `background.png` file, which will be the application's background by adding the following scss to `global.scss`:
+
+```scss
+.bg-brand-logo{
+    --background: var(--brand-bg) no-repeat center/cover fixed;
+}
+```
+
+And the following variable to `variables.scss`:
+
+```scss
+--brand-bg: url("../assets/img/background.png");
+```
+
+Finally, go to the `app-routing.module.ts` file, import the library, and add the following routes:
+
+```typescript
+import { KeycloakAngularLoginGuardService, LoginRedirectPageComponent } from 'keycloak-angular-login';
+
+{
+  path: '**',
+  redirectTo: 'login-redirect',
+  pathMatch: 'full'
+},
+{
+  path: 'login-redirect',
+  component: LoginRedirectPageComponent
+},
+```
+
+Additionally, on the first page of our application, we need to add the GuardService from the library:
+
+```typescript
+{
+  path: 'home',
+  loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule),
+  canActivate: [KeycloakAngularLoginGuardService]
+}
+
+```
+
+A complete example of this file is as follows:
+
+```typescript
+import { NgModule } from '@angular/core';
+import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { KeycloakAngularLoginGuardService, LoginRedirectPageComponent } from 'keycloak-angular-login';
+
+const routes: Routes = [
+  {
+    path: 'home',
+    loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule),
+    canActivate: [KeycloakAngularLoginGuardService]
+  },
+  {
+    path: '**',
+    redirectTo: 'login-redirect',
+    pathMatch: 'full'
+  },
+  {
+    path: 'login-redirect',
+    component: LoginRedirectPageComponent
+  },
+];
+
+@NgModule({
+  imports: [
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+  ],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+```
+
+And now we need to add the following to `app.component.ts`:
+
+```typescript
+import { ChangeDetectorRef, Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { KeycloakAngularLoginService, ConfigService } from 'keycloak-angular-login';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: 'app.component.html',
+  styleUrls: ['app.component.scss'],
+})
+
+export class AppComponent {
+  constructor(
+    private as: KeycloakAngularLoginService,
+    private translate: TranslateService,
+    public router: Router,
+    private keycloakService: ConfigService,
+    private cdr: ChangeDetectorRef
+  ) {
+    this.init();
+    translate.setDefaultLang('ca');
+    translate.use('ca');
+  }
+
+  private async init() {
+    try {
+      const response = await this.authService.initOAuth();
+      if (response) {
+        await this.rolesService.checkRoles();
+        if (!this.rolesService.correctRoles) {
+          // action if it does not have roles
+        } else {
+          this.router.navigate(['/home']);
+        }
+      } else {
+        this.router.navigate(['/login-redirect']);
+      }
+    } catch (error) {
+      console.error('Error during initialization', error);
+    }
+  }
+}
+```
+
+And to be able to log out of the application, we need to add the following function to the corresponding button:
+
+```typescript
+constructor(
+  public authService: KeycloakAngularLoginService
+) { }
+
+logout() {
+  this.authService.logout();
+}
+```
+
+```html
+<ion-button color="primary" slot="icon-only" (click)="logout()">
+  <ion-icon name="power-outline" class="logout"></ion-icon>
+</ion-button>
+```
+
+## License
+
+ISC

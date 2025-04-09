@@ -1,0 +1,16 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/keycloak-angular-login",
+  "lib": {
+    "entryFile": "src/public-api.ts"
+  },
+  "allowedNonPeerDependencies": [
+    "@capacitor/preferences",
+    "angular-oauth2-oidc",
+    "angular-oauth2-oidc-jwks",
+    "tslib",
+    "@ngx-translate/core",
+    "@ngx-translate/http-loader",
+    "jwt-decode"
+  ]
+}

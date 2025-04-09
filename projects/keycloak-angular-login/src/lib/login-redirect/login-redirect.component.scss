@@ -1,0 +1,29 @@
+.login-panel {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    text-align: center;
+    img {
+        width: 300px;
+    }
+    a {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+}
+
+h3 {
+    font-size: 18px;
+    margin: 0;
+    color: black;
+}
+
+h1 {
+    color: black;
+}
+
+ion-spinner {
+    color: black;
+}

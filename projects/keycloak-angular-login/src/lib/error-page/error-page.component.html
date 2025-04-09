@@ -1,0 +1,18 @@
+<ion-content [fullscreen]="true" class="bg-brand-logo header-offset">
+    <div class="login-panel">
+      <!-- Logo -->
+      <img src="assets/img/logoLogin.svg" alt="logo">
+      <div style="height: 20px;"></div>
+      <h1>{{ 'error_login.title' | translate }}</h1>
+      <div style="height: 20px;"></div>
+      <h3>
+        {{ 'error_login.message' | translate }}
+      </h3>
+      <div style="height: 20px;"></div>
+      <h3>
+        {{ 'error_login.content.1' | translate }}
+        <a (click)='logout()'>{{ 'error_login.content.2' | translate }}</a>
+        {{ 'error_login.content.3' | translate }}
+      </h3>
+    </div>
+</ion-content>
