@@ -3,8 +3,8 @@
   "compileOnSave": false,
   "compilerOptions": {
     "paths": {
-      "athenea-login-keycloak": [
-        "./dist/athenea-login-keycloak"
+      "keycloak-angular-login": [
+        "./dist/keycloak-angular-login"
       ]
     },
     "outDir": "./dist/out-tsc",
